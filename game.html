@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geography Quiz Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./geo.css" defer>
+    <meta charset="utf-8" />
+    <style>
+      img {
+        max-width: 90%;
+        max-height: 80%;
+      }
+      @keyframes animatedBackground {
+        from { background-position: 0 0; }
+        to { background-position: 100% 0; }
+      }
+      .boxx {
+        background: rgb(211,228,246) url(./bg.jpeg) no-repeat right top;
+        animation: animatedBackground 60s linear infinite;
+        min-height: 800px;
+      }
+      .boxpadding {
+        width: 100%;
+      }
+      body {
+        background-color: rgb(211,228,246);
+        margin: auto;
+        max-width: 500px;
+      }
+      p {
+        font-size: 19px;
+      }
+      .aero {
+        background: rgba(255, 255, 255, 0.35);
+        border-radius: 3px;
+        box-shadow: 0 1px 5px rgba(0, 153, 204, 1);
+      }
+      button.glass {
+        color: black;
+        width: 90%;
+      }
+      .cBlack {
+        background-color: #c0c0c0;
+      }
+      .cGreen {
+        background-color: green;
+      }
+      .cRed {
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="boxx">
+        <div class="boxpadding">
+          <center>
+            <br>
+            <div class="card-12 round-xlarge">
+              <div class="question center aero" id="q" style="width:100%">Question</div>
+            </div>
+            <br>
+            <button class="btn border border-blue round-large glass cBlack" id="1" onclick="submit(this);">Option A</button><br><br>
+            <button class="btn border border-blue round-large glass cBlack" id="2" onclick="submit(this);">Option B</button><br><br>
+            <button class="btn border border-blue round-large glass cBlack" id="3" onclick="submit(this);">Option C</button><br><br>
+            <button class="btn border border-blue round-large glass cBlack" id="4" onclick="submit(this);">Option D</button><br><br>
+          </center>
+        </div>
+      </div>
+    </div>
+    <div class="bottom center">
+        <p id="score">0/10</p>
+    </div>
+    <script src="./countries.js"></script>
+    <script defer>
+      var cAns;
+      var F = -1;
+      var C = 0;
+      function $ (id) { return document.getElementById(id); };
+      function submit (That) {
+      	console.log(That.id, That.innerHTML);
+        if (That.innerHTML == cAns) 
+          void C++ || (That.className = 'btn border border-blue round-large glass cGreen');
+        else {
+          That.className = 'btn border border-blue round-large glass cRed';
+          for (var i = 1; i <= 4; i++) 
+            if ($(i).innerHTML == cAns)
+              $(i).className = 'btn border border-blue round-large glass cGreen';
+        }
+        setTimeout(newQ, 1000);
+        
+      }
+      function rand (No) {
+        return Math.round(Math.random() * No);
+      };
+      function newQ () {
+        if (typeof countries == undefined) return alert('page not fully loaded yet');
+        F++;
+        for (var i = 1; i <= 4; i++)
+          $(i).className = 'btn border border-blue round-large glass cBlack';
+        var country = countries[rand(countries.length-1)];
+        function C2() {
+          return countries[rand(countries.length-1)];
+        };
+        var _ = {
+            Q: "",
+            A: []
+        };
+        function nD(_, func) {
+            function nDd (otheranswer) {
+              return (_.A[0] == otheranswer || _.A[1] == otheranswer || _.A[2] == otheranswer || _.A[3] == otheranswer || '' === otheranswer) ? false : otheranswer;
+            };
+            for (var i = 1; i < 4; i++) {
+                var w = true;
+                while (w === true) {
+                    _.A[i] = nDd(func());
+                    if (_.A[i] !== false)
+                        w = false;
+                }
+            }
+            _.a0 = _.A[0];
+            return _;
+        };
+        switch (rand(4)) {
+            case 0: //capital city
+                _.Q = '<p>What is the capital of '+country.name.common+'?</p>';
+                _.A = [country.capital];
+                _ = nD(_, function () { return C2().capital });
+                break;
+            case 1: //language(s) spoken
+                _.Q = '<p>What is the official language of '+country.name.common+'?</p>';
+                _.A = [country.languages[Object.keys(country.languages)[0]]];
+                var tmp;
+                _ = nD(_, function () { return ( tmp=C2() ).languages[Object.keys(tmp.languages)[0]] });
+                break;
+            case 2: //flags
+                _.Q = '<img src="./flags/'+country.cca3+'.svg" />';
+                _.A = [country.name.common];
+                _ = nD(_, function () { return C2().name.common });
+                break;
+            case 3: //maps
+                _.Q = '<img src="./maps/'+country.name.common+'.svg" />';
+                _.A = [country.name.common];
+                _ = nD(_, function () { return C2().name.common });
+                break;
+            case 4: //tld / custom
+                _.Q = '<p>What is the top level domain of '+country.name.common+'?</p>';
+                _.A = [country.tld[0]];
+                _ = nD(_, function () { return C2().tld[0] });
+                break;
+        }
+        _.A.sort();
+        for (var i = 1; i <= 4; i++)
+          $(i).innerHTML = _.A[i-1];
+        cAns = _.a0;
+        $('q').innerHTML = _.Q;
+        $('score').innerHTML = C+'/'+F;      
+      }
+      newQ();
+    </script>
+  </body>
+</html>
